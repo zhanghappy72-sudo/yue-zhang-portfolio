@@ -1,0 +1,27 @@
+node_modules
+dist
+.vercel
+.DS_Store
+Thumbs.db
+*.log
+.idea
+.vscode
+.agents
+.codex
+
+# Office / temp files
+~$*
+.~*
+
+# Local-only heavy media and packaged VR builds
+content/视频作品/
+content/**/*.mp4
+content/**/*.mov
+content/**/*.zip
+content/**/*.exe
+content/牡丹亭/Package-Dreaming The Peony Pavilion/
+
+# Keep deploy-safe website assets tracked
+!content/张悦-简历 VR.pdf
+!content/牡丹亭/ending.mp4
+!assets/**
