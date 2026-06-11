@@ -1,8 +1,8 @@
 /**
  * 站点运行入口
  * - 路由在这里维护
- * - 首页 sticky 镜头、视频 hover 预览、图片页 3D 环形画廊都在这里
- * - 交互参数统一来自 src/config/siteConfig.js
+ * - 图片页横向惯性 / 无限滚动参数来自 src/config/siteConfig.js
+ * - 卡片 3D magnetic hover 参数也来自 src/config/siteConfig.js
  */
 import { renderLayout } from './components/layout.js';
 import { renderHomePage } from './pages/home.js';
@@ -129,45 +129,33 @@ const initHeroStickyNarrative = () => {
 
   const shell = document.querySelector('[data-hero-sticky-shell]');
   const stage = document.querySelector('[data-hero-sticky-stage]');
-  const scene = document.querySelector('[data-home-scene]');
   const title = document.querySelector('[data-hero-title]');
   const titleEnglish = title?.querySelector('span');
   const english = document.querySelector('[data-hero-english]');
-  const subtitle = document.querySelector('[data-hero-subtitle]');
   const intro = document.querySelector('[data-hero-intro]');
   const actions = document.querySelector('[data-hero-actions]');
   const copy = document.querySelector('[data-hero-copy]');
   const about = document.querySelector('[data-home-about]');
-  const person = document.querySelector('[data-hero-person]');
   const cards = [...document.querySelectorAll('[data-hero-card]')];
   const bgLayers = [...document.querySelectorAll('[data-hero-bg-layer]')];
 
-  if (!shell || !stage || !cards.length || !scene) {
+  if (!shell || !stage || !cards.length) {
     window.__heroStickyCleanup = null;
     return;
   }
 
   const reducedMotion = prefersReducedMotion();
   const {
-    stickyHeight,
+    sectionMinHeight,
     backgroundScaleStart,
     backgroundScaleEnd,
-    mouseSensitivityX,
-    mouseSensitivityY,
-    maxRotateX,
-    maxRotateY,
     titleShiftY,
-    subheadShiftY,
     englishFadeStart,
     englishFadeEnd,
-    copyShiftY,
-    figureScaleEnd,
-    figureDepth,
-    cardSpreadX,
-    cardSpreadY
-  } = siteConfig.homeScene;
+    copyShiftY
+  } = siteConfig.heroSticky;
 
-  shell.style.setProperty('--hero-sticky-height', stickyHeight);
+  shell.style.setProperty('--hero-sticky-height', sectionMinHeight);
 
   const clamp = (value, min, max) => Math.max(min, Math.min(max, value));
   const lerp = (start, end, amount) => start + (end - start) * amount;
@@ -181,10 +169,6 @@ const initHeroStickyNarrative = () => {
   let ticking = false;
   let shellStart = 0;
   let shellRange = 1;
-  let pointerX = 0;
-  let pointerY = 0;
-  let targetPointerX = 0;
-  let targetPointerY = 0;
 
   const measure = () => {
     const rect = shell.getBoundingClientRect();
@@ -202,21 +186,16 @@ const initHeroStickyNarrative = () => {
       return;
     }
 
-    pointerX = lerp(pointerX, targetPointerX, 0.12);
-    pointerY = lerp(pointerY, targetPointerY, 0.12);
-
     const bgScale = lerp(backgroundScaleStart, backgroundScaleEnd, progress);
     const englishOpacity = fadeByProgress(progress, englishFadeStart, englishFadeEnd);
     const introOpacity = lerp(1, 0.52, progress);
     const aboutOpacity = clamp((progress - 0.56) / 0.34, 0, 1);
-    const sceneRotateY = pointerX * maxRotateY;
-    const sceneRotateX = pointerY * -maxRotateX;
 
     bgLayers.forEach((layer, index) => {
       const multiplier = 1 + index * 0.08;
       const scale = 1 + (bgScale - 1) * multiplier;
-      const shiftY = progress * (20 + index * 13) + pointerY * mouseSensitivityY * (index + 0.5);
-      const shiftX = (index % 2 === 0 ? -1 : 1) * progress * (10 + index * 8) + pointerX * mouseSensitivityX * (index + 0.35);
+      const shiftY = progress * (16 + index * 12);
+      const shiftX = (index % 2 === 0 ? -1 : 1) * progress * (8 + index * 6);
       const opacity =
         index === bgLayers.length - 1
           ? lerp(0.16, 0.26, progress)
@@ -226,18 +205,12 @@ const initHeroStickyNarrative = () => {
       layer.style.opacity = `${opacity}`;
     });
 
-    scene.style.transform = `perspective(1800px) rotateY(${sceneRotateY}deg) rotateX(${sceneRotateX}deg) translateZ(${lerp(0, figureDepth, progress)}px)`;
-
     title.style.transform = `translate3d(0, ${lerp(0, titleShiftY, progress)}px, 0)`;
     if (titleEnglish) {
       titleEnglish.style.opacity = `${lerp(1, 0.22, progress)}`;
     }
-    if (subtitle) {
-      subtitle.style.transform = `translate3d(0, ${lerp(0, subheadShiftY, progress)}px, 0)`;
-      subtitle.style.opacity = `${lerp(1, 0.4, progress)}`;
-    }
     if (copy) {
-      copy.style.transform = `translate3d(${pointerX * -18}px, ${lerp(0, copyShiftY, progress) + pointerY * -10}px, 0)`;
+      copy.style.transform = `translate3d(0, ${lerp(0, copyShiftY, progress)}px, 0)`;
     }
     if (english) {
       english.style.opacity = `${englishOpacity}`;
@@ -248,20 +221,14 @@ const initHeroStickyNarrative = () => {
     if (actions) {
       actions.style.opacity = `${lerp(1, 0.76, progress)}`;
     }
-    if (person) {
-      const personScale = lerp(1, figureScaleEnd, progress);
-      person.style.transform = `translate3d(${pointerX * 18}px, ${pointerY * 12 + progress * -20}px, 0) scale(${personScale})`;
-    }
     cards.forEach((card) => {
-      const depth = Number(card.style.getPropertyValue('--orbit-depth')) || 1;
+      const depth = Number(card.style.getPropertyValue('--orbit-depth').replace('px', '')) || 1;
       const parallaxX = parseFloat(card.style.getPropertyValue('--orbit-parallax-x')) || 0;
       const parallaxY = parseFloat(card.style.getPropertyValue('--orbit-parallax-y')) || 0;
-      const spreadX = parseFloat(card.style.getPropertyValue('--orbit-spread-x')) || 0;
-      const spreadY = parseFloat(card.style.getPropertyValue('--orbit-spread-y')) || 0;
-      const translateX = parallaxX * progress * depth + pointerX * mouseSensitivityX * depth + spreadX * progress * (cardSpreadX / 42);
-      const translateY = parallaxY * progress * depth + pointerY * mouseSensitivityY * depth + spreadY * progress * (cardSpreadY / 26);
+      const translateX = parallaxX * progress * depth;
+      const translateY = parallaxY * progress * depth;
       const scale = lerp(1, 1 + (depth - 1) * 0.08, progress);
-      card.style.setProperty('--orbit-scroll-transform', `translate3d(${translateX}px, ${translateY}px, ${progress * depth * 24}px) scale(${scale})`);
+      card.style.setProperty('--orbit-scroll-transform', `translate3d(${translateX}px, ${translateY}px, 0) scale(${scale})`);
     });
 
     if (about) {
@@ -281,33 +248,14 @@ const initHeroStickyNarrative = () => {
     onScroll();
   };
 
-  const onPointerMove = (event) => {
-    const rect = stage.getBoundingClientRect();
-    const x = (event.clientX - rect.left) / rect.width - 0.5;
-    const y = (event.clientY - rect.top) / rect.height - 0.5;
-    targetPointerX = clamp(x, -0.5, 0.5);
-    targetPointerY = clamp(y, -0.5, 0.5);
-    onScroll();
-  };
-
-  const onPointerLeave = () => {
-    targetPointerX = 0;
-    targetPointerY = 0;
-    onScroll();
-  };
-
   measure();
   paint();
   window.addEventListener('scroll', onScroll, { passive: true });
   window.addEventListener('resize', onResize);
-  stage.addEventListener('pointermove', onPointerMove);
-  stage.addEventListener('pointerleave', onPointerLeave);
 
   window.__heroStickyCleanup = () => {
     window.removeEventListener('scroll', onScroll);
     window.removeEventListener('resize', onResize);
-    stage.removeEventListener('pointermove', onPointerMove);
-    stage.removeEventListener('pointerleave', onPointerLeave);
     window.cancelAnimationFrame(rafId);
   };
 };
@@ -316,7 +264,7 @@ const initVideoHoverPreviews = () => {
   window.__videoPreviewCleanup?.();
 
   const cards = [...document.querySelectorAll('[data-video-preview-card]')];
-  if (!cards.length || window.innerWidth < 901) {
+  if (!cards.length) {
     window.__videoPreviewCleanup = null;
     return;
   }
@@ -390,99 +338,129 @@ const initImageGalleryMotion = () => {
   window.__imageGalleryCleanup?.();
 
   const stage = document.querySelector('[data-image-stage]');
-  const track = document.querySelector('[data-image-ring-track]');
-  const items = [...document.querySelectorAll('[data-ring-item]')];
+  const sphere = document.querySelector('[data-image-sphere]');
+  const items = [...document.querySelectorAll('[data-sphere-item]')];
 
-  if (!stage || !track || !items.length) {
+  if (!stage || !sphere || !items.length) {
     window.__imageGalleryCleanup = null;
     return;
   }
 
   const isMobile = window.innerWidth < 901;
   const {
-    imageRingRadiusDesktop,
-    imageRingRadiusMobile,
-    imageRingSpacing,
-    imageRingDragSensitivity,
-    imageRingInertiaFriction,
-    imageRingSnapStrength,
-    imageRingMaxTiltX,
-    imageRingDepthScaleNear,
-    imageRingDepthScaleFar,
-    imageRingOpacityNear,
-    imageRingOpacityFar,
-    imageRingBrightnessNear,
-    imageRingBrightnessFar,
-    imageRingBlurNear,
-    imageRingBlurFar,
-    imageRingBaseWidthDesktop,
-    imageRingBaseWidthMobile,
-    imageRingHoverScale
+    imageSphereRadiusDesktop,
+    imageSphereRadiusMobile,
+    imageSphereDragSensitivity,
+    imageSphereInertiaFriction,
+    imageSphereMaxTiltX,
+    imageSphereDepthScaleNear,
+    imageSphereDepthScaleFar,
+    imageSphereOpacityNear,
+    imageSphereOpacityFar,
+    imageSphereBrightnessNear,
+    imageSphereBrightnessFar,
+    imageSphereBlurNear,
+    imageSphereBlurFar,
+    imageSphereBaseWidthDesktop,
+    imageSphereBaseWidthMobile
   } = siteConfig.motion;
 
-  const total = items.length;
-  const stepAngle = (Math.PI * 2) / total;
-  let activeIndex = 0;
-  let tiltX = 0;
-  let velocity = 0;
-  let tiltVelocity = 0;
+  let rotationY = isMobile ? -8 : -10;
+  let rotationX = isMobile ? 8 : 10;
+  let velocityY = 0;
+  let velocityX = 0;
   let rafId = 0;
   let isPointerDown = false;
   let lastPointerX = 0;
   let lastPointerY = 0;
   let movedSincePointerDown = false;
-  let radius = isMobile ? imageRingRadiusMobile : imageRingRadiusDesktop;
+  let radius = isMobile ? imageSphereRadiusMobile : imageSphereRadiusDesktop;
   let hoveringItem = null;
   let pointerId = null;
 
   const clamp = (value, min, max) => Math.max(min, Math.min(max, value));
   const lerp = (start, end, amount) => start + (end - start) * amount;
-  const shortestOffset = (index, current) => {
-    let delta = index - current;
-    while (delta > total / 2) delta -= total;
-    while (delta < -total / 2) delta += total;
-    return delta;
-  };
+  const spherePoints = [];
 
   const measure = () => {
-    radius = window.innerWidth < 901 ? imageRingRadiusMobile : imageRingRadiusDesktop;
+    radius = window.innerWidth < 901 ? imageSphereRadiusMobile : imageSphereRadiusDesktop;
+  };
+
+  const buildPoints = () => {
+    const count = items.length;
+    const layerConfig = isMobile
+      ? [
+          { y: -0.42, scale: 0.8, count: Math.max(3, Math.round(count * 0.2)) },
+          { y: -0.14, scale: 0.94, count: Math.max(4, Math.round(count * 0.28)) },
+          { y: 0.16, scale: 1, count: Math.max(5, Math.round(count * 0.28)) },
+          { y: 0.46, scale: 0.82, count: count }
+        ]
+      : [
+          { y: -0.58, scale: 0.78, count: Math.max(4, Math.round(count * 0.14)) },
+          { y: -0.28, scale: 0.86, count: Math.max(5, Math.round(count * 0.2)) },
+          { y: 0.02, scale: 0.98, count: Math.max(6, Math.round(count * 0.24)) },
+          { y: 0.32, scale: 0.9, count: Math.max(6, Math.round(count * 0.2)) },
+          { y: 0.62, scale: 0.8, count: count }
+        ];
+
+    let remaining = count;
+    const layers = layerConfig
+      .map((layer, index) => {
+        const isLast = index === layerConfig.length - 1;
+        const layerCount = isLast ? remaining : Math.min(remaining, layer.count);
+        remaining -= layerCount;
+        return { ...layer, count: Math.max(0, layerCount) };
+      })
+      .filter((layer) => layer.count > 0);
+
+    let cursor = 0;
+    layers.forEach((layer, layerIndex) => {
+      const offset = layerIndex % 2 === 0 ? 0 : Math.PI / Math.max(layer.count, 1);
+      for (let itemIndex = 0; itemIndex < layer.count && cursor < count; itemIndex += 1) {
+        const theta = (itemIndex / layer.count) * Math.PI * 2 + offset;
+        spherePoints[cursor] = {
+          theta,
+          layerY: layer.y,
+          layerScale: layer.scale
+        };
+        cursor += 1;
+      }
+    });
   };
 
   const paint = () => {
     if (!isPointerDown) {
-      activeIndex += velocity;
-      tiltX = clamp(tiltX + tiltVelocity, -imageRingMaxTiltX, imageRingMaxTiltX);
-      velocity *= imageRingInertiaFriction;
-      tiltVelocity *= imageRingInertiaFriction;
-      if (Math.abs(velocity) < 0.0002) {
-        velocity = 0;
-        const nearest = Math.round(activeIndex);
-        activeIndex = lerp(activeIndex, nearest, imageRingSnapStrength);
-      }
-      if (Math.abs(tiltVelocity) < 0.002) tiltVelocity = 0;
+      rotationY += velocityY;
+      rotationX = clamp(rotationX + velocityX, -imageSphereMaxTiltX, imageSphereMaxTiltX);
+      velocityY *= imageSphereInertiaFriction;
+      velocityX *= imageSphereInertiaFriction;
+      if (Math.abs(velocityY) < 0.001) velocityY = 0;
+      if (Math.abs(velocityX) < 0.001) velocityX = 0;
     }
 
     items.forEach((item, index) => {
-      const offset = shortestOffset(index, activeIndex);
-      const theta = offset * stepAngle * imageRingSpacing;
-      const normalizedZ = (Math.cos(theta) + 1) / 2;
-      const normalizedX = Math.sin(theta);
-      const x = normalizedX * radius;
-      const z = Math.cos(theta) * radius * 0.7;
-      const y = normalizedX * tiltX * 3.2;
-      const scale = lerp(imageRingDepthScaleFar, imageRingDepthScaleNear, normalizedZ);
-      const opacity = lerp(imageRingOpacityFar, imageRingOpacityNear, normalizedZ);
-      const brightness = lerp(imageRingBrightnessFar, imageRingBrightnessNear, normalizedZ);
-      const blur = lerp(imageRingBlurFar, imageRingBlurNear, normalizedZ);
-      const hoverScale = item === hoveringItem && Math.abs(offset) < 0.26 ? imageRingHoverScale : 1;
-      const itemWidth = (window.innerWidth < 901 ? imageRingBaseWidthMobile : imageRingBaseWidthDesktop) * (0.88 + normalizedZ * 0.22);
+      const point = spherePoints[index];
+      const theta = point.theta + (rotationY * Math.PI) / 180;
+      const normalizedZ = Math.cos(theta) * point.layerScale;
+      const normalizedX = Math.sin(theta) * point.layerScale;
+      const depthNormalized = (normalizedZ + 1) / 2;
+      const spreadX = (window.innerWidth < 901 ? 0.98 : 1.04) * radius;
+      const spreadY = (window.innerWidth < 901 ? 0.72 : 0.9) * radius;
+      const x = normalizedX * spreadX;
+      const y = point.layerY * spreadY - (rotationX / imageSphereMaxTiltX) * (spreadY * 0.18) + normalizedZ * 10;
+      const z = normalizedZ * radius;
+      const scale = lerp(imageSphereDepthScaleFar, imageSphereDepthScaleNear, depthNormalized);
+      const opacity = lerp(imageSphereOpacityFar, imageSphereOpacityNear, depthNormalized);
+      const brightness = lerp(imageSphereBrightnessFar, imageSphereBrightnessNear, depthNormalized);
+      const blur = lerp(imageSphereBlurFar, imageSphereBlurNear, depthNormalized);
+      const hoverScale = item === hoveringItem ? siteConfig.motion.imageSphereHoverScale : 1;
+      const itemWidth = (window.innerWidth < 901 ? imageSphereBaseWidthMobile : imageSphereBaseWidthDesktop) * (0.92 + depthNormalized * 0.42);
 
       item.style.width = `${itemWidth}px`;
-      item.style.transform = `translate(-50%, -50%) translate3d(${x}px, ${y}px, ${z}px) rotateY(${normalizedX * -18}deg) scale(${scale * hoverScale})`;
-      item.style.opacity = `${Math.abs(offset) > 3.2 ? 0 : opacity}`;
+      item.style.transform = `translate(-50%, -50%) translate3d(${x}px, ${y}px, ${z}px) rotateY(${normalizedX * -16}deg) scale(${scale * hoverScale})`;
+      item.style.opacity = `${opacity}`;
       item.style.filter = `brightness(${brightness}) blur(${blur}px)`;
-      item.style.zIndex = `${Math.round(normalizedZ * 1000)}`;
-      item.classList.toggle('is-current', Math.abs(offset) < 0.26);
+      item.style.zIndex = `${Math.round(depthNormalized * 1000)}`;
     });
 
     rafId = window.requestAnimationFrame(paint);
@@ -508,11 +486,12 @@ const initImageGalleryMotion = () => {
     lastPointerX = event.clientX;
     lastPointerY = event.clientY;
     if (Math.abs(deltaX) > 2 || Math.abs(deltaY) > 2) movedSincePointerDown = true;
-    const deltaIndex = deltaX * imageRingDragSensitivity;
-    activeIndex -= deltaIndex;
-    velocity = -deltaIndex;
-    tiltX = clamp(tiltX - deltaY * imageRingDragSensitivity * 18, -imageRingMaxTiltX, imageRingMaxTiltX);
-    tiltVelocity = -deltaY * imageRingDragSensitivity * 2.4;
+    const nextVelocityY = deltaX * imageSphereDragSensitivity;
+    const nextVelocityX = deltaY * imageSphereDragSensitivity * 0.16;
+    rotationY += nextVelocityY;
+    rotationX = clamp(rotationX - nextVelocityX, -imageSphereMaxTiltX, imageSphereMaxTiltX);
+    velocityY = nextVelocityY;
+    velocityX = -nextVelocityX;
   };
 
   const endPointer = (event) => {
@@ -542,6 +521,7 @@ const initImageGalleryMotion = () => {
   };
 
   measure();
+  buildPoints();
   bindHover();
   paint();
   stage.addEventListener('pointerdown', onPointerDown);
@@ -574,7 +554,7 @@ const initMagneticCards = () => {
       const x = (event.clientX - rect.left) / rect.width - 0.5;
       const y = (event.clientY - rect.top) / rect.height - 0.5;
       if (orbitRoot) {
-        const scale = siteConfig.homeScene.cardHoverScale;
+        const scale = siteConfig.motion.heroCardHoverScale;
         card.style.setProperty(
           '--orbit-magnetic-transform',
           `perspective(${siteConfig.motion.magneticPerspective}px) rotateY(${x * siteConfig.motion.magneticRotate}deg) rotateX(${y * -siteConfig.motion.magneticRotate}deg) translateY(-${siteConfig.motion.magneticLift}px) scale(${scale})`
@@ -619,7 +599,6 @@ const appendLightbox = () => `
 
 const renderApp = () => {
   const pathname = window.location.pathname;
-  const routeKey = pathname === '/' ? 'home' : pathname.startsWith('/video') ? 'video' : pathname.startsWith('/image') ? 'image' : pathname.startsWith('/vr') ? 'vr' : pathname.startsWith('/posts') ? 'posts' : pathname.startsWith('/about') ? 'about' : 'default';
   const staticPage = routes.find((route) => route.match.test(pathname));
   const page = staticPage || getDynamicPage(pathname) || {
     title: '页面未找到',
@@ -635,7 +614,6 @@ const renderApp = () => {
   };
 
   updateSeo({ title: page.title, description: page.description });
-  document.body.setAttribute('data-route', routeKey);
 
   app.innerHTML = renderLayout(
     pathname,

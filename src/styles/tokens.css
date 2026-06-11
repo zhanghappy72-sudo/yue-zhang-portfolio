@@ -2,8 +2,6 @@
   全站视觉 tokens
   - 主背景色 / 卡片底色 / 文字色：改这里
   - 圆角、阴影、版心宽度：改这里
-  - 首页全屏复古渐变、暖光、暗角、颗粒：改这里
-  - Video 深色展映空间的综合色调：改这里
   - 如果想整体换一套颜色风格，优先从这个文件开始
 */
 :root {
@@ -16,14 +14,6 @@
   --bg-cinema: #2d231d;
   --bg-cinema-soft: #45362b;
   --bg-cinema-glow: rgba(182, 142, 103, 0.18);
-  --home-space-deep: #261c18;
-  --home-space-mid: #584439;
-  --home-space-sand: #cfb389;
-  --home-space-rose: #a57b73;
-  --home-space-fog: rgba(234, 213, 184, 0.15);
-  --home-space-glow: rgba(219, 166, 122, 0.22);
-  --home-space-vignette: rgba(24, 18, 14, 0.42);
-  --home-space-line: rgba(248, 242, 232, 0.9);
   --surface: rgba(241, 230, 205, 0.72);
   --surface-strong: rgba(247, 239, 223, 0.82);
   --ink: #1f1914;
@@ -39,7 +29,6 @@
   --shadow: 0 24px 60px rgba(46, 31, 18, 0.12);
   --shadow-hero-card: 0 34px 72px rgba(46, 31, 18, 0.16);
   --shadow-cinema: 0 32px 80px rgba(15, 10, 8, 0.38);
-  --shadow-scene-plane: 0 30px 90px rgba(12, 8, 6, 0.28);
   --grain-opacity: 0.085;
   --radius-lg: 30px;
   --radius-md: 22px;
