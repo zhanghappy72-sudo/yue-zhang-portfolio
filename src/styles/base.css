@@ -643,6 +643,7 @@ main {
   touch-action: pan-y;
   user-select: none;
   cursor: grab;
+  display: block;
 }
 
 .image-gradient-stage::after {
@@ -688,10 +689,10 @@ main {
 
 .image-gradient-card {
   position: absolute;
-  top: 50%;
+  top: 47%;
   left: 50%;
   width: min(28vw, 360px);
-  height: clamp(320px, 56vh, 520px);
+  height: clamp(280px, 50vh, 480px);
   padding: 16px;
   border: 1px solid rgba(81, 60, 44, 0.08);
   border-radius: 28px;
@@ -736,7 +737,7 @@ main {
   transform: translateZ(0);
   user-select: none;
   -webkit-user-drag: none;
-  background: rgba(248, 239, 222, 0.08);
+  background: rgba(248, 239, 222, 0.14);
 }
 
 .image-gradient-card:hover {
@@ -1629,7 +1630,7 @@ main {
 
   .image-gradient-card {
     width: min(56vw, 300px);
-    height: clamp(260px, 44vh, 420px);
+    height: clamp(240px, 40vh, 360px);
     padding: 12px;
   }
 
