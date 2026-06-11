@@ -3,12 +3,14 @@
  * - VR 列表页和详情页都在这里
  * - 项目文字、trailer、ending、蓝图、资产、下载链接来自 src/data/vrProjects.js
  * - 部署版如没有本地大文件，会自动降级为封面 + 外部按钮，而不是直接报错
+ * - 如果你以后要改 VR 详情页结构，这个文件是第一优先文件
  */
 import { vrProjects } from '../data/vrProjects.js';
 
 const vrProject = vrProjects[0];
 
 const renderImageGrid = (items, className = 'vr-gallery-grid-free') => `
+  <!-- VR 图片网格：Storyboard / Blueprint / Assets 等都复用这个方法 -->
   <div class="${className}">
     ${items
       .map(
@@ -23,6 +25,7 @@ const renderImageGrid = (items, className = 'vr-gallery-grid-free') => `
 `;
 
 export const renderVrPage = () => `
+  <!-- VR 列表页首屏 -->
   <section class="page-hero page-hero-vr page-hero-vr-soft">
     <p class="eyebrow">VR / 沉浸式项目</p>
     <h1>${vrProject.subtitle}<span>${vrProject.title}</span></h1>
@@ -30,6 +33,7 @@ export const renderVrPage = () => `
     <a class="button" href="/vr/${vrProject.slug}" data-link>Open Full Case</a>
   </section>
 
+  <!-- VR 列表页的重点项目卡 -->
   <section class="section vr-card-overview">
     <article class="vr-summary-card vr-summary-card-soft">
       <img src="${vrProject.poster}" alt="游园惊梦海报" loading="lazy" />
@@ -43,6 +47,7 @@ export const renderVrPage = () => `
 `;
 
 export const renderVrDetailPage = (project) => `
+  <!-- VR 详情页首屏 -->
   <section class="page-hero page-hero-vr page-hero-vr-soft">
     <p class="eyebrow">VR Detail</p>
     <h1>${project.subtitle}<span>${project.title}</span></h1>
@@ -50,8 +55,10 @@ export const renderVrDetailPage = (project) => `
     <a class="button button-secondary" href="/vr" data-link>Back to VR</a>
   </section>
 
+  <!-- VR 详情页主结构：左侧媒体与图库，右侧说明与下载 -->
   <section class="section detail-layout detail-layout-vr-left">
     <div class="detail-main detail-main-vr-left">
+      <!-- Trailer 主区 -->
       <section class="vr-case-block vr-case-block-trailer">
         <div class="section-heading">
           <p class="eyebrow">Trailer</p>
@@ -88,6 +95,7 @@ export const renderVrDetailPage = (project) => `
         </div>
       </section>
 
+      <!-- AIGC 皮影戏动画区：这里直接播放 ending.mp4 -->
       <section class="vr-case-block">
         <div class="section-heading">
           <p class="eyebrow">AIGC Animation</p>
@@ -101,6 +109,7 @@ export const renderVrDetailPage = (project) => `
         </article>
       </section>
 
+      <!-- 图片交互展示区：Storyboard / Blueprint / Assets -->
       <section class="vr-case-block">
         <div class="section-heading">
           <p class="eyebrow">Interactive Gallery</p>
@@ -123,6 +132,7 @@ export const renderVrDetailPage = (project) => `
       </section>
     </div>
 
+    <!-- 右侧深色说明栏：故事结构、交互方式、职责、工具、下载区 -->
     <aside class="detail-side detail-side-dark detail-side-vr-soft">
         <div class="meta-block">
           <span>Story Structure</span>

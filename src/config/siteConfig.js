@@ -5,8 +5,16 @@
  * - 全站磁性悬停强度：motion.magnetic*
  *
  * 这些参数只影响交互与位置，不改变数据内容。
+ * 如果你想“改动页面手感但不改内容”，优先来这个文件。
  */
 export const siteConfig = {
+  /**
+   * 首页 Hero 右侧 6 张浮动卡片的位置参数
+   * - top / left：控制卡片在右侧区域里的坐标
+   * - width：控制卡片宽度
+   * - zIndex：控制前后遮挡层级
+   * - transform：控制初始轻微倾斜角度
+   */
   heroOrbitCards: [
     {
       top: '4%',
@@ -52,9 +60,22 @@ export const siteConfig = {
     }
   ],
   motion: {
+    /**
+     * Image 非人像滚轴
+     * - lerp：越小越稳、越慢；越大越跟手
+     * - wheelMultiplier：鼠标滚轮推进速度
+     * - dragMultiplier：鼠标拖拽推动速度
+     */
     imageGalleryLerp: 0.09,
     imageGalleryWheelMultiplier: 0.8,
     imageGalleryDragMultiplier: 1.3,
+
+    /**
+     * 全站磁性悬停效果
+     * - perspective：景深距离
+     * - rotate：最大旋转角度
+     * - lift：悬停时向上抬起的像素值
+     */
     magneticPerspective: 1200,
     magneticRotate: 8,
     magneticLift: 4

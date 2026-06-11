@@ -1,8 +1,10 @@
 /**
  * Image 页面
- * - 非人像长廊结构在这里
+ * - 非人像图片滚轴结构在这里
  * - 人像分组展示在这里
  * - 惯性 / 无限滚动的实际交互在 src/main.js
+ * - 新增非人像图片：优先去 src/data/imageProjects.js 改 nonPortraitFiles
+ * - 新增人像分组或调整组图：优先去 src/data/imageProjects.js 改 portraitGroups
  */
 import { imageProjects } from '../data/imageProjects.js';
 
@@ -13,6 +15,7 @@ const loopImages = [
 ];
 
 const renderPortraitGroup = (group) => {
+  // 人像 2 使用单独网格类，其余人像组走普通四列平铺
   if (group.label !== '人像 2') {
     return `
       <section class="portrait-group">
@@ -55,12 +58,14 @@ const renderPortraitGroup = (group) => {
 };
 
 export const renderImagePage = () => `
+  <!-- Image 页首屏：标题与说明 -->
   <section class="page-hero">
     <p class="eyebrow">Image / 图片作品</p>
     <h1>Visual Works<span>moving gallery and portrait groups</span></h1>
     <p>非人像图片进入真正环形的无限移动长廊；人像按组自然展开，保留全部原始比例。</p>
   </section>
 
+  <!-- 非人像模块：当前是横向无限滚动长廊，交互在 src/main.js -->
   <section class="section">
     <div class="section-heading">
       <p class="eyebrow">Visual Gallery</p>
@@ -85,6 +90,7 @@ export const renderImagePage = () => `
     </div>
   </section>
 
+  <!-- 人像模块：按组展示，点击仍然走 lightbox -->
   <section class="section">
     <div class="section-heading">
       <p class="eyebrow">Portrait</p>

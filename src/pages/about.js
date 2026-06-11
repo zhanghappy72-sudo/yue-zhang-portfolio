@@ -2,6 +2,8 @@
  * About 页面
  * - 个人介绍、教育背景、技能标签、统计数字都在这里改
  * - 人物图路径使用 assets/yue-portrait.png
+ * - 如果你以后要改 About 页文案，这是第一优先文件
+ * - 如果只是想换人物图片，请保留这里的 fileUrl(...) 结构，只改图片路径
  */
 import { renderStatCards, renderTagList } from '../components/cards.js';
 import { fileUrl } from '../utils/fileUrl.js';
@@ -38,6 +40,7 @@ const stats = [
 ];
 
 export const renderAboutPage = () => `
+  <!-- About 页首屏：标题、中文介绍、英文简介、人物图 -->
   <section class="page-hero page-hero-about">
     <div class="about-hero-copy">
       <p class="eyebrow">About / 关于我</p>
@@ -54,6 +57,7 @@ export const renderAboutPage = () => `
     </div>
   </section>
 
+  <!-- About 内容区：左侧创作方向，右侧教育背景 -->
   <section class="section about-grid">
     <article class="about-panel">
       <p class="eyebrow">Profile</p>
@@ -74,6 +78,7 @@ export const renderAboutPage = () => `
     </article>
   </section>
 
+  <!-- 技能与数据区：标签和统计数字 -->
   <section class="section">
     <div class="section-heading">
       <p class="eyebrow">Capabilities</p>
