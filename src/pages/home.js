@@ -14,67 +14,47 @@ export const renderHomePage = () => {
   const aboutTags = ['Digital Media', 'VR Film', 'Visual Works', 'AIGC', 'Content Strategy'];
 
   return `
-    <section
-      class="hero-sticky-shell"
-      data-hero-sticky-shell
-      style="--hero-sticky-height:${siteConfig.heroSticky.sectionMinHeight};"
-    >
-      <div class="hero-sticky-track" data-hero-sticky-track>
-        <div class="hero-bg-stack" aria-hidden="true">
-          <div class="hero-bg-layer hero-bg-layer-base" data-hero-bg-layer="base"></div>
-          <div class="hero-bg-layer hero-bg-layer-rose" data-hero-bg-layer="rose"></div>
-          <div class="hero-bg-layer hero-bg-layer-bloom" data-hero-bg-layer="bloom"></div>
-          <div class="hero-bg-layer hero-bg-layer-shadow" data-hero-bg-layer="shadow"></div>
-          <div class="hero-grain-layer" data-hero-bg-layer="grain"></div>
+    <section class="hero hero-refined">
+      <div class="hero-copy">
+        <p class="eyebrow">Portfolio / 作品集</p>
+        <h1>${siteMeta.owner}<span>${siteMeta.ownerEnglish}</span></h1>
+        <p class="hero-title">${siteMeta.heroTagline}</p>
+        <p class="hero-intro">
+          聚焦数字媒体、沉浸式叙事、VR 互动、影像创作、AIGC 动画与内容策划，展示故事如何从“被观看”转向“被体验”。
+        </p>
+        <div class="hero-actions">
+          <a class="button" href="/about" data-link>About</a>
         </div>
-        <section class="hero hero-refined hero-sticky-stage" data-hero-sticky-stage>
-          <div class="hero-copy" data-hero-copy>
-            <p class="eyebrow">Portfolio / 作品集</p>
-            <h1 data-hero-title>${siteMeta.owner}<span>${siteMeta.ownerEnglish}</span></h1>
-            <p class="hero-title" data-hero-english>${siteMeta.heroTagline}</p>
-            <p class="hero-intro" data-hero-intro>
-              聚焦数字媒体、沉浸式叙事、VR 互动、影像创作、AIGC 动画与内容策划，展示故事如何从“被观看”转向“被体验”。
-            </p>
-            <div class="hero-actions" data-hero-actions>
-              <a class="button" href="/about" data-link>About</a>
-            </div>
-          </div>
-          <div class="hero-orbit hero-orbit-refined" aria-hidden="true" data-hero-orbit>
-            ${homeHighlights
-              .map((item, index) => {
-                const orbit = siteConfig.heroOrbitCards[index] || {};
-                return `
-                  <a
-                    class="orbit-card orbit-card-${index + 1}"
-                    href="${item.href}"
-                    data-link
-                    data-magnetic-card
-                    data-hero-card
-                    style="
-                      --orbit-top:${orbit.top || '0'};
-                      --orbit-left:${orbit.left || '0'};
-                      --orbit-width:${orbit.width || 'min(286px, 32vw)'};
-                      --orbit-z:${orbit.zIndex || 1};
-                      --orbit-transform:${orbit.transform || 'none'};
-                      --orbit-parallax-x:${orbit.parallaxX || 0}px;
-                      --orbit-parallax-y:${orbit.parallaxY || 0}px;
-                      --orbit-depth:${orbit.depth || 1};
-                    "
-                  >
-                    <small>${item.title}</small>
-                    <strong>${item.titleZh}</strong>
-                    <span>${item.description}</span>
-                  </a>
-                `;
-              })
-              .join('')}
-          </div>
-        </section>
       </div>
-      <div class="hero-sticky-exit" aria-hidden="true"></div>
+      <div class="hero-orbit hero-orbit-refined" aria-hidden="true">
+        ${homeHighlights
+          .map((item, index) => {
+            const orbit = siteConfig.heroOrbitCards[index] || {};
+            return `
+              <a
+                class="orbit-card orbit-card-${index + 1}"
+                href="${item.href}"
+                data-link
+                data-magnetic-card
+                style="
+                  --orbit-top:${orbit.top || '0'};
+                  --orbit-left:${orbit.left || '0'};
+                  --orbit-width:${orbit.width || 'min(286px, 32vw)'};
+                  --orbit-z:${orbit.zIndex || 1};
+                  --orbit-transform:${orbit.transform || 'none'};
+                "
+              >
+                <small>${item.title}</small>
+                <strong>${item.titleZh}</strong>
+                <span>${item.description}</span>
+              </a>
+            `;
+          })
+          .join('')}
+      </div>
     </section>
 
-    <section class="section section-home-about" data-home-about>
+    <section class="section section-home-about">
       <div class="section-heading">
         <p class="eyebrow">About / 关于我</p>
         <h2>让故事从观看转向体验</h2>
