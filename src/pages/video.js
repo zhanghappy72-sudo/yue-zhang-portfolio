@@ -36,56 +36,57 @@ const renderDetailGallery = (gallery) => {
 };
 
 export const renderVideoPage = () => `
-  <section class="page-hero page-hero-dark page-hero-video-cinema">
-    <p class="eyebrow">Video / 视频作品</p>
-    <h1>Video Works<span>floating cover cards</span></h1>
-    <p>列表页只保留封面与短信息，完整简介、链接和播放内容放到详情页中阅读。</p>
-  </section>
+  <div class="video-cinematic-page">
+    <section class="page-hero page-hero-dark page-hero-video-cinema">
+      <p class="eyebrow">Video / 视频作品</p>
+      <h1>Video Works<span>cinematic screening wall</span></h1>
+      <p>列表页只保留封面与简短信息，完整简介、链接和播放内容放到详情页中阅读。</p>
+    </section>
 
-  <section class="section section-video-cinema" style="--video-preview-hover-scale:${siteConfig.motion.videoPreviewHoverScale};">
-    <div class="video-cloud video-cloud-covers video-cloud-hover-focus video-cloud-preview" data-video-cloud>
-      ${videoProjects
-        .map(
-          (item, index) => `
-            <a
-              class="video-bubble video-cover-card video-cover-card-refined ${item.status === 'coming-soon' ? 'is-muted' : ''}"
-              href="/video/${item.slug}"
-              data-link
-              data-video-preview-card
-              data-video-preview-type="${item.media.type}"
-              data-video-preview-src="${item.media.type === 'local-file' ? item.media.src : ''}"
-              data-video-preview-poster="${item.cover || ''}"
-              aria-label="${item.subtitle}"
-              style="--bubble-index:${index}"
-            >
-              <div class="video-cover-shell video-cover-shell-wide">
-                ${
-                  item.cover
-                    ? `<img src="${item.cover}" alt="${item.subtitle}封面" loading="lazy" class="video-cover-image" />`
-                    : `<div class="video-cover-placeholder">${item.subtitle}</div>`
-                }
-                ${
-                  item.media.type === 'local-file'
-                    ? `<video class="video-cover-preview" muted playsinline preload="metadata" aria-hidden="true"></video>`
-                    : ''
-                }
-                <div class="video-cover-veil" aria-hidden="true"></div>
-              </div>
-              <div class="video-cover-copy">
-                <small>${item.category}</small>
-                <strong>${item.subtitle}</strong>
-                <span>${item.title}</span>
-              </div>
-              <div class="video-meta-lines">
-                <p>${item.year} / ${item.role}</p>
-                <p>${item.keywords.slice(0, 3).join(' / ')}</p>
-              </div>
-            </a>
-          `
-        )
-        .join('')}
-    </div>
-  </section>
+    <section class="section section-video-cinema" style="--video-preview-hover-scale:${siteConfig.motion.videoPreviewHoverScale};">
+      <div class="video-cloud video-cloud-covers video-cloud-hover-focus video-cloud-preview video-cinema-grid" data-video-cloud>
+        ${videoProjects
+          .map(
+            (item, index) => `
+              <a
+                class="video-bubble video-cover-card video-cover-card-refined video-cinema-card ${item.status === 'coming-soon' ? 'is-muted' : ''}"
+                href="/video/${item.slug}"
+                data-link
+                data-video-preview-card
+                data-video-preview-type="${item.media.type}"
+                data-video-preview-src="${item.media.type === 'local-file' ? item.media.src : ''}"
+                data-video-preview-poster="${item.cover || ''}"
+                aria-label="${item.subtitle}"
+                style="--bubble-index:${index}"
+              >
+                <div class="video-cover-shell video-cover-shell-wide">
+                  ${
+                    item.cover
+                      ? `<img src="${item.cover}" alt="${item.subtitle}封面" loading="lazy" class="video-cover-image" />`
+                      : `<div class="video-cover-placeholder">${item.subtitle}</div>`
+                  }
+                  ${
+                    item.media.type === 'local-file'
+                      ? `<video class="video-cover-preview" muted playsinline preload="none" aria-hidden="true"></video>`
+                      : ''
+                  }
+                  <div class="video-cover-veil" aria-hidden="true"></div>
+                </div>
+                <div class="video-cover-copy">
+                  <small>${item.category}</small>
+                  <strong>${item.subtitle}</strong>
+                  <span>${item.title}</span>
+                </div>
+                <div class="video-meta-lines">
+                  <p>${item.year} / ${item.category}</p>
+                </div>
+              </a>
+            `
+          )
+          .join('')}
+      </div>
+    </section>
+  </div>
 `;
 
 export const renderVideoDetailPage = (project) => `
