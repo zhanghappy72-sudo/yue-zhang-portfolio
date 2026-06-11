@@ -15,6 +15,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const rootDir = path.resolve(__dirname, '..');
 const distDir = path.join(rootDir, 'dist');
+const NETLIFY_REDIRECTS = '/* /index.html 200\n';
 
 const EXCLUDED_DIRS = new Set(['.git', '.agents', '.codex', 'dist', 'node_modules', 'format']);
 const EXCLUDED_SUFFIXES = ['.mp4', '.mov', '.zip', '.exe', '.bat', '.docx', '.pptx', '.heic'];
@@ -165,6 +166,7 @@ const main = async () => {
     largeFiles
   };
 
+  await fs.writeFile(path.join(distDir, '_redirects'), NETLIFY_REDIRECTS, 'utf8');
   await fs.writeFile(path.join(distDir, 'build-report.json'), JSON.stringify(report, null, 2), 'utf8');
 
   console.log('Build finished: dist/');
