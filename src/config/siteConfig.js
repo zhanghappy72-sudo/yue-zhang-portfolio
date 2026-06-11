@@ -64,15 +64,15 @@ export const siteConfig = {
      * - blurStrength: 后景卡片的最大模糊强度
      * - bgLightnessBias / bgSaturationBias: canvas 渐变明度与饱和度偏置
      */
-    imageSliderFriction: 0.9,
-    imageSliderWheelSensitivity: 0.6,
-    imageSliderDragSensitivity: 1,
-    imageSliderMaxRotation: 28,
-    imageSliderMaxDepth: 140,
-    imageSliderMinScale: 0.92,
-    imageSliderScaleRange: 0.1,
-    imageSliderGap: 28,
-    imageSliderBlurStrength: 2.5,
+    imageSliderFriction: 0.92,
+    imageSliderWheelSensitivity: 0.95,
+    imageSliderDragSensitivity: 0.92,
+    imageSliderMaxRotation: 34,
+    imageSliderMaxDepth: 460,
+    imageSliderMinScale: 0.58,
+    imageSliderScaleRange: 0.5,
+    imageSliderGap: 0.88,
+    imageSliderBlurStrength: 7.5,
     imageSliderBgLightnessBias: 1.02,
     imageSliderBgSaturationBias: 0.82,
 

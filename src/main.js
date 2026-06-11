@@ -387,7 +387,7 @@ const initImageGalleryMotion = () => {
   const transformForScreenX = (screenX) => {
     const { ry, tz, scale } = computeTransformComponents(screenX);
     return {
-      transform: `translate(-50%, -50%) translate3d(${screenX}px, 0, ${tz}px) rotateY(${ry}deg) scale(${scale})`,
+      transform: `translate3d(calc(-50% + ${screenX}px), -50%, ${tz}px) rotateY(${ry}deg) scale(${scale})`,
       z: tz
     };
   };
