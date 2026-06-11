@@ -387,7 +387,7 @@ const initImageGalleryMotion = () => {
   const transformForScreenX = (screenX) => {
     const { ry, tz, scale } = computeTransformComponents(screenX);
     return {
-      transform: `translate3d(calc(-50% + ${screenX}px), -50%, ${tz}px) rotateY(${ry}deg) scale(${scale})`,
+      transform: `translate3d(${screenX}px,-50%,${tz}px) rotateY(${ry}deg) scale(${scale})`,
       z: tz
     };
   };
@@ -396,14 +396,13 @@ const initImageGalleryMotion = () => {
     if (idx < 0 || idx >= items.length || idx === activeIndex) return;
     activeIndex = idx;
     const pal = gradPalette[idx] || fallbackFromIndex(idx);
-    const blendWarm = (channel, base) => Math.round(channel * 0.62 + base * 0.38);
     gradCurrent = {
-      r1: blendWarm(pal.c1[0], 220),
-      g1: blendWarm(pal.c1[1], 194),
-      b1: blendWarm(pal.c1[2], 154),
-      r2: blendWarm(pal.c2[0], 176),
-      g2: blendWarm(pal.c2[1], 142),
-      b2: blendWarm(pal.c2[2], 112)
+      r1: pal.c1[0],
+      g1: pal.c1[1],
+      b1: pal.c1[2],
+      r2: pal.c2[0],
+      g2: pal.c2[1],
+      b2: pal.c2[2]
     };
     bgFastUntil = performance.now() + 800;
   };
@@ -472,7 +471,7 @@ const initImageGalleryMotion = () => {
     resizeBG();
     const w = bgCanvas.clientWidth || stage.clientWidth;
     const h = bgCanvas.clientHeight || stage.clientHeight;
-    bgCtx.fillStyle = '#ddc9a3';
+    bgCtx.fillStyle = '#d9c6a2';
     bgCtx.fillRect(0, 0, w, h);
 
     const time = now * 0.0002;
@@ -488,13 +487,13 @@ const initImageGalleryMotion = () => {
     const r2 = Math.max(w, h) * 0.68;
 
     const g1 = bgCtx.createRadialGradient(x1, y1, 0, x1, y1, r1);
-    g1.addColorStop(0, `rgba(${gradCurrent.r1},${gradCurrent.g1},${gradCurrent.b1},0.58)`);
+    g1.addColorStop(0, `rgba(${gradCurrent.r1},${gradCurrent.g1},${gradCurrent.b1},0.78)`);
     g1.addColorStop(1, 'rgba(255,255,255,0)');
     bgCtx.fillStyle = g1;
     bgCtx.fillRect(0, 0, w, h);
 
     const g2 = bgCtx.createRadialGradient(x2, y2, 0, x2, y2, r2);
-    g2.addColorStop(0, `rgba(${gradCurrent.r2},${gradCurrent.g2},${gradCurrent.b2},0.42)`);
+    g2.addColorStop(0, `rgba(${gradCurrent.r2},${gradCurrent.g2},${gradCurrent.b2},0.62)`);
     g2.addColorStop(1, 'rgba(255,255,255,0)');
     bgCtx.fillStyle = g2;
     bgCtx.fillRect(0, 0, w, h);
