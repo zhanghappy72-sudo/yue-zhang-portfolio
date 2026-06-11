@@ -8,6 +8,12 @@
   --bg: #c8b28d;
   --bg-soft: #d8c5a0;
   --bg-surface: #e6d6b7;
+  --bg-rose: #b99587;
+  --bg-brown-muted: #8a6c56;
+  --bg-deep: #33261f;
+  --bg-cinema: #2d231d;
+  --bg-cinema-soft: #45362b;
+  --bg-cinema-glow: rgba(182, 142, 103, 0.18);
   --surface: rgba(241, 230, 205, 0.72);
   --surface-strong: rgba(247, 239, 223, 0.82);
   --ink: #1f1914;
@@ -21,6 +27,9 @@
   --vr-bg-soft: #2f251e;
   --vr-line: rgba(237, 226, 205, 0.16);
   --shadow: 0 24px 60px rgba(46, 31, 18, 0.12);
+  --shadow-hero-card: 0 34px 72px rgba(46, 31, 18, 0.16);
+  --shadow-cinema: 0 32px 80px rgba(15, 10, 8, 0.38);
+  --grain-opacity: 0.085;
   --radius-lg: 30px;
   --radius-md: 22px;
   --radius-sm: 14px;
