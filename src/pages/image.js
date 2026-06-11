@@ -1,10 +1,16 @@
 /**
  * Image 页面
- * - 非人像 gradient slider 结构在这里
+ * - 非人像长廊结构在这里
  * - 人像分组展示在这里
- * - 非人像 3D infinite carousel 的实际交互在 src/main.js
+ * - 惯性 / 无限滚动的实际交互在 src/main.js
  */
 import { imageProjects } from '../data/imageProjects.js';
+
+const loopImages = [
+  ...imageProjects.nonPortraitImages,
+  ...imageProjects.nonPortraitImages,
+  ...imageProjects.nonPortraitImages
+];
 
 const renderPortraitGroup = (group) => {
   if (group.label !== '人像 2') {
@@ -51,8 +57,8 @@ const renderPortraitGroup = (group) => {
 export const renderImagePage = () => `
   <section class="page-hero">
     <p class="eyebrow">Image / 图片作品</p>
-    <h1>Visual Works<span>gradient carousel and portrait groups</span></h1>
-    <p>非人像图片进入 3D infinite carousel；人像按组自然展开，保留全部原始比例。</p>
+    <h1>Visual Works<span>moving gallery and portrait groups</span></h1>
+    <p>非人像图片进入真正环形的无限移动长廊；人像按组自然展开，保留全部原始比例。</p>
   </section>
 
   <section class="section">
@@ -60,14 +66,13 @@ export const renderImagePage = () => `
       <p class="eyebrow">Visual Gallery</p>
       <h2>非人像图片</h2>
     </div>
-    <div class="image-gradient-stage" data-image-slider-stage>
-      <canvas class="image-gradient-bg" data-image-slider-bg aria-hidden="true"></canvas>
-      <div class="image-gradient-cards" data-image-slider-cards aria-label="非人像图片 3D 轮播">
-        ${imageProjects.nonPortraitImages
+    <div class="image-stage" data-image-stage>
+      <div class="image-ribbon-track image-ribbon-track-loop" data-gallery-track data-loop-track data-loop-copies="3">
+        ${loopImages
           .map(
-            (image) => `
-              <button class="image-gradient-card" type="button" data-image-slider-item data-lightbox="${image.src}" data-alt="${image.alt}">
-                <img class="image-gradient-card__img" src="${image.src}" alt="${image.alt}" loading="lazy" draggable="false" />
+            (image, index) => `
+              <button class="ribbon-item ribbon-item-${(index % 6) + 1}" type="button" data-lightbox="${image.src}" data-alt="${image.alt}" data-gallery-item>
+                <img src="${image.src}" alt="${image.alt}" loading="lazy" />
               </button>
             `
           )
@@ -75,7 +80,7 @@ export const renderImagePage = () => `
       </div>
       <div class="image-stage-note">
         <span>Drag / Wheel / Hover</span>
-        <small>Infinite gradient 3D carousel adapted from gradientslider-main</small>
+        <small>Infinite loop gallery inspired by picture move and 3Drotation</small>
       </div>
     </div>
   </section>

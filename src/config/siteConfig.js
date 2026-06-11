@@ -1,7 +1,7 @@
 /**
  * 常用可调参数
  * - 首页右侧 hero 卡片位置：heroOrbitCards
- * - Image 非人像 gradient slider 参数：motion.imageSlider*
+ * - 图片页横向画廊速度 / 阻尼：motion.imageGallery*
  * - 全站磁性悬停强度：motion.magnetic*
  *
  * 这些参数只影响交互与位置，不改变数据内容。
@@ -52,36 +52,9 @@ export const siteConfig = {
     }
   ],
   motion: {
-    /**
-     * Image 非人像 gradient slider
-     * - friction: 惯性衰减速度，越接近 1 越滑
-     * - wheelSensitivity: 鼠标滚轮对水平速度的影响
-     * - dragSensitivity: 松手后拖拽速度转换成惯性的倍率
-     * - maxRotation: 卡片左右旋转最大角度
-     * - maxDepth: 卡片向后退入空间的最大深度
-     * - minScale / scaleRange: 远景最小尺寸与前后景尺寸差
-     * - gap: 相邻卡片的水平步长
-     * - blurStrength: 后景卡片的最大模糊强度
-     * - bgLightnessBias / bgSaturationBias: canvas 渐变明度与饱和度偏置
-     */
-    imageSliderFriction: 0.92,
-    imageSliderWheelSensitivity: 0.95,
-    imageSliderDragSensitivity: 0.92,
-    imageSliderMaxRotation: 34,
-    imageSliderMaxDepth: 460,
-    imageSliderMinScale: 0.58,
-    imageSliderScaleRange: 0.5,
-    imageSliderGap: 0.88,
-    imageSliderBlurStrength: 7.5,
-    imageSliderBgLightnessBias: 1.02,
-    imageSliderBgSaturationBias: 0.82,
-
-    /**
-     * 站内通用磁性 hover
-     * - perspective: 鼠标悬停时卡片景深
-     * - rotate: 最大倾斜角度
-     * - lift: 最大上浮距离
-     */
+    imageGalleryLerp: 0.09,
+    imageGalleryWheelMultiplier: 0.8,
+    imageGalleryDragMultiplier: 1.3,
     magneticPerspective: 1200,
     magneticRotate: 8,
     magneticLift: 4
