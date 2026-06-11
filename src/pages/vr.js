@@ -72,7 +72,7 @@ export const renderVrDetailPage = (project) => `
           project.trailer.type === 'external-link'
             ? `<div class="detail-links detail-links-inline"><a class="button" href="${project.trailer.href}" target="_blank" rel="noreferrer">${project.trailer.note || 'Open Trailer'}</a></div>`
             : project.trailer.type === 'unavailable'
-              ? `<div class="detail-links detail-links-inline"><span class="button button-disabled">${project.trailer.note || 'Trailer link to be added'}</span></div>`
+              ? `<p class="detail-note">${project.trailer.note || 'Trailer link to be added'}</p>`
               : ''
         }
         <div class="vr-trailer-strip">

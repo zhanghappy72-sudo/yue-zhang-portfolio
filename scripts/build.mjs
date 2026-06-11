@@ -1,7 +1,7 @@
 import { promises as fs } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { deployCopyAllowlist, getMissingExternalMedia } from '../src/config/mediaManifest.js';
+import { deployCopyAllowlist, getMissingExternalMedia, normalizeRelativePath } from '../src/config/mediaManifest.js';
 
 /**
  * 部署构建脚本
@@ -23,6 +23,7 @@ const REQUIRED_ROOT_DIRS = ['src', 'assets', 'content'];
 const ABSOLUTE_PATH_MARKERS = ['/Users/', 'C:\\Users\\'];
 
 const isExcludedFile = (relativePath) => EXCLUDED_SUFFIXES.some((suffix) => relativePath.toLowerCase().endsWith(suffix));
+const normalizedAllowlist = new Set(deployCopyAllowlist.map((entry) => normalizeRelativePath(entry)));
 
 const isTempFile = (name) => name.startsWith('~$') || name.startsWith('.~') || name === '.DS_Store';
 
@@ -43,6 +44,7 @@ const copyTree = async (sourceDir, destinationDir, relativePrefix = '') => {
 
     const sourcePath = path.join(sourceDir, entry.name);
     const relativePath = path.join(relativePrefix, entry.name);
+    const normalizedRelativePath = normalizeRelativePath(relativePath);
     const destinationPath = path.join(destinationDir, entry.name);
 
     if (entry.isDirectory()) {
@@ -52,7 +54,7 @@ const copyTree = async (sourceDir, destinationDir, relativePrefix = '') => {
       continue;
     }
 
-    if (isExcludedFile(relativePath) && !deployCopyAllowlist.includes(relativePath)) {
+    if (isExcludedFile(relativePath) && !normalizedAllowlist.has(normalizedRelativePath)) {
       continue;
     }
 
@@ -152,7 +154,7 @@ const main = async () => {
 
   await copyTree(path.join(rootDir, 'src'), path.join(distDir, 'src'));
   await copyTree(path.join(rootDir, 'assets'), path.join(distDir, 'assets'));
-  await copyTree(path.join(rootDir, 'content'), path.join(distDir, 'content'));
+  await copyTree(path.join(rootDir, 'content'), path.join(distDir, 'content'), 'content');
 
   const missingExternalMedia = getMissingExternalMedia();
   const largeFiles = await listLargeFiles(rootDir);

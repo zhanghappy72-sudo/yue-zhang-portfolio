@@ -83,9 +83,8 @@ export const mediaManifest = {
   },
   'vr.trailer': {
     mode: 'external-link',
-    deployUrl:
-      'https://sotonac-my.sharepoint.com/:v:/g/personal/rt1r23_soton_ac_uk/IQCgMv9Z0_3UTocispQj_uCoAYoX8vMeExI-8iOc5CM9Q5Y?nav=eyJyZWZlcnJhbEluZm8iOnsicmVmZXJyYWxBcHAiOiJPbmVEcml2ZUZvckJ1c2luZXNzIiwicmVmZXJyYWxBcHBQbGF0Zm9ybSI6IldlYiIsInJlZmVycmFsTW9kZSI6InZpZXciLCJyZWZlcnJhbFZpZXciOiJNeUZpbGVzTGlua0NvcHkifX0&e=IfcmkI',
-    label: '外部观看预告片 / Open Trailer'
+    deployUrl: '',
+    label: '预告片链接待更新 / Trailer link to be updated'
   },
   'vr.download.zip': {
     mode: 'external-link',
@@ -122,6 +121,8 @@ export const mediaManifest = {
  * 目前只把网站真实引用、且体积适合静态部署的本地媒体保留在部署产物中。
  */
 export const deployCopyAllowlist = ['content/牡丹亭/ending.mp4'];
+
+export const normalizeRelativePath = (relativePath) => relativePath.replaceAll('\\', '/');
 
 export const getMissingExternalMedia = () =>
   Object.entries(mediaManifest)

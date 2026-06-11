@@ -15,9 +15,7 @@ export const vrProjects = [
     trailer: {
       ...resolveMediaSource({
         key: 'vr.trailer',
-        localPath: 'content/牡丹亭/预告片/Group 1 trailer/Group 1 trailer.mp4',
-        fallbackHref:
-          'https://sotonac-my.sharepoint.com/:v:/g/personal/rt1r23_soton_ac_uk/IQCgMv9Z0_3UTocispQj_uCoAYoX8vMeExI-8iOc5CM9Q5Y?nav=eyJyZWZlcnJhbEluZm8iOnsicmVmZXJyYWxBcHAiOiJPbmVEcml2ZUZvckJ1c2luZXNzIiwicmVmZXJyYWxBcHBQbGF0Zm9ybSI6IldlYiIsInJlZmVycmFsTW9kZSI6InZpZXciLCJyZWZlcnJhbFZpZXciOiJNeUZpbGVzTGlua0NvcHkifX0&e=IfcmkI'
+        localPath: 'content/牡丹亭/预告片/Group 1 trailer/Group 1 trailer.mp4'
       }),
       poster: fileUrl('content/牡丹亭/预告片/Group 1 trailer/最终最终-封面.jpg')
     },
@@ -128,10 +126,6 @@ export const vrProjects = [
           key: 'vr.download.exe',
           localPath: 'content/牡丹亭/Package-Dreaming The Peony Pavilion/Windows/VRstudy.exe'
         })
-      },
-      {
-        label: 'Trailer (SharePoint)',
-        href: 'https://sotonac-my.sharepoint.com/:v:/g/personal/rt1r23_soton_ac_uk/IQCgMv9Z0_3UTocispQj_uCoAYoX8vMeExI-8iOc5CM9Q5Y?nav=eyJyZWZlcnJhbEluZm8iOnsicmVmZXJyYWxBcHAiOiJPbmVEcml2ZUZvckJ1c2luZXNzIiwicmVmZXJyYWxBcHBQbGF0Zm9ybSI6IldlYiIsInJlZmVycmFsTW9kZSI6InZpZXciLCJyZWZlcnJhbFZpZXciOiJNeUZpbGVzTGlua0NvcHkifX0&e=IfcmkI'
       }
     ]
   }
