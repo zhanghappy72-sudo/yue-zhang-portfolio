@@ -15,7 +15,7 @@ export const vrProjects = [
     trailer: {
       ...resolveMediaSource({
         key: 'vr.trailer',
-        localPath: 'content/牡丹亭/预告片/Group 1 trailer/Group 1 trailer.mp4'
+        localPath: 'content/牡丹亭/预告片/Group 1 trailer/Group 1 trailer.deploy.mp4'
       }),
       poster: fileUrl('content/牡丹亭/预告片/Group 1 trailer/最终最终-封面.jpg')
     },

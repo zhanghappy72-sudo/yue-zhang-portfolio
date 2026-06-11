@@ -24,4 +24,5 @@ content/牡丹亭/Package-Dreaming The Peony Pavilion/
 # Keep deploy-safe website assets tracked
 !content/张悦-简历 VR.pdf
 !content/牡丹亭/ending.mp4
+!content/牡丹亭/预告片/Group 1 trailer/Group 1 trailer.deploy.mp4
 !assets/**

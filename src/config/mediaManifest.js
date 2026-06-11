@@ -82,9 +82,9 @@ export const mediaManifest = {
     label: '外部观看 / Watch Externally'
   },
   'vr.trailer': {
-    mode: 'external-link',
+    mode: 'copy',
     deployUrl: '',
-    label: '预告片链接待更新 / Trailer link to be updated'
+    label: '站内直接播放 / Play inline'
   },
   'vr.download.zip': {
     mode: 'external-link',
@@ -120,7 +120,10 @@ export const mediaManifest = {
  * build 时会把这里列出的轻量运行素材复制进 dist。
  * 目前只把网站真实引用、且体积适合静态部署的本地媒体保留在部署产物中。
  */
-export const deployCopyAllowlist = ['content/牡丹亭/ending.mp4'];
+export const deployCopyAllowlist = [
+  'content/牡丹亭/ending.mp4',
+  'content/牡丹亭/预告片/Group 1 trailer/Group 1 trailer.deploy.mp4'
+];
 
 export const normalizeRelativePath = (relativePath) => relativePath.replaceAll('\\', '/');
 
